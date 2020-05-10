@@ -4,7 +4,6 @@
     - Merge the 2 sorted subarrays to create a sorted subarray in A[p...r]
 """
 
-import math
 import random
 
 
@@ -36,7 +35,7 @@ def merge(A, p, q, r):
 
 def mergeSort(A, p, r):
     if p < r:
-        q = math.floor((p + r) / 2)
+        q = (p + r) // 2
         mergeSort(A, p, q)
         mergeSort(A, q + 1, r)
         merge(A, p, q, r)
