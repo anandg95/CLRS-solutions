@@ -1,2 +1,4 @@
 # CLRS-solutions
-Solutions to Introduction to Algorithms - CLRS
+Code to all algorithms in Introduction to Algorithms - CLRS
+
+Problem set could be added later.
