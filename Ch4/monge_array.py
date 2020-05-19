@@ -25,6 +25,16 @@ Finding the leftmost minimum element in each row in a monge array:
 """
 
 
+def find_min(A, start, end):
+    "Find the leftmost minimum in an array within indices start to end (inclusive)"
+    minimum = A[start]
+    minimum_pos = start
+    for i in range(start, end + 1):
+        if A[i] < minimum:
+            minimum, minimum_pos = A[i], i
+    return minimum_pos
+
+
 def odd_from_even(A_odd, f_even):
     f = []
     m = len(A_odd[0])
@@ -33,19 +43,16 @@ def odd_from_even(A_odd, f_even):
 
         left = f_even[i]  # boundaries for A_odd[i]
         if i == len(f_even) - 1 and len(f_even) == len(A_odd):
-            # equal number of even and odd rows
+            # equal number of even and odd rows and there is no row to the right
             right = m - 1
         else:
             # one even row more than odd rows
             right = f_even[i + 1]
 
         # find the leftmost minimum for the odd row
-        minimum = row[left]
-        minimum_pos = left
-        for j in range(left, right + 1):
-            if row[j] < minimum:
-                minimum, minimum_pos = row[j], j
+        minimum_pos = find_min(row, left, right)
         f.append(minimum_pos)
+
     if len(A_odd) < len(f_even):  # one even row more than odd rows
         f.append(f_even[-1])
     return f
@@ -54,17 +61,12 @@ def odd_from_even(A_odd, f_even):
 def leftmost_minimum_index(A):
     if len(A) == 1:
         # base case, the 0th row [[1,2,3,...]]
-        minimum = float("inf")
-        minimum_pos = -1
-        for i, element in enumerate(A[0]):
-            if element < minimum:
-                minimum_pos, minimum = i, element
-        return [minimum_pos]
+        return [find_min(A[0], 0, len(A[0]) - 1)]
 
     A_even = A[::2]  # This is a copy :(
     A_odd = A[1::2]  # same here
-    even_indices = leftmost_minimum_index(A_even)
-    indices = odd_from_even(A_odd, even_indices)
+    f_even = leftmost_minimum_index(A_even)
+    indices = odd_from_even(A_odd, f_even)
     return indices
 
 
