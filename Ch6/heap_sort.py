@@ -11,7 +11,7 @@ Properties of a heap:
   root height=h
 
 Heap Sort:
-- BUILD-MAX-HEAP in place from the unsorted array A - O(n)
+- BUILD-MAX-HEAP in place from the unsorted array A -> O(n)
 - The root would be the largest element in the heap - swap that with A[-1] and decrement heap size by 1.
   Largest element is now at the very end of the array
 - Perform MAX-HEAPIFY on A[1] to recover the max-heap property. Recursively swap A[1] with element at A[heap_size]
@@ -49,6 +49,7 @@ def max_heapify(A, i):
 def build_max_heap(A):
     "Create a max heap representation for a given array"
     for i in range(A.heap_size // 2 - 1, -1, -1):
+        # leaves are excluded since they form a trivial subtree (no children)
         max_heapify(A, i)
 
 
