@@ -26,8 +26,52 @@ class BST:
         else:
             y.right = node
 
-    def delete(self, node):
-        pass
+    def delete(self, node_z):
+        """
+        Cases:
+        1. The node is a leaf, easy-peasy, get rid of it
+        2. Node has only one child, move the child to the node's position (the whole subtree figuratively)
+        3. Node has 2 children. You can choose to retain the left subtree or the right subtree as such. If
+           you choose to leave the left subtree as is, then discover a node from the right subtree that will
+           correctly follow the BST property. The node that follows this will be the sucessor of the node to be 
+           deleted (smallest node in the right subtree).
+           However there is a catch. The successor could have a right subtree of its own. 
+           i.  Successor is the right child of the deleted node. Here just transplant
+           ii. Successor (s) is somewhere down in the right subtree of deleted node. Now where do we put its own right subtree
+               and the deleted node's right subtree (of which s was a part)?
+               Answer: When we move the successor, we free up the left child spot of successor's original parent.
+               We move the right subtree of successor as the left subtree of successor's original parent
+        Steps for (ii):
+           Deleted node (Z) will have a parent (P), 2 children (L, R) and a successor (Y). Successor has a right subtree (YR). Successor has
+           a parent (YP).
+           - Move YR as the left subtree of YP (transplant)
+           - Move Y to where Z sat. Assign Y as parent to L and R. Transplant the new Y to Z so that P becomes parent
+             to Y.
+        """
+        if node_z.left == None:
+            self.transplant(node_z, node_z.right)
+        elif node_z.right == None:
+            self.transplant(node_z, node_z.left)
+        else:
+            y = self.minimum(node_z.right)
+            if y != node_z.right:
+                self.transplant(y, y.right)
+                y.right = node_z.right
+                y.right.parent = y
+            self.transplant(node_z, y)
+            y.left = node_z.left
+            node_z.left.parent = y
+
+    def transplant(self, u, v):
+        """Replaces the subtree rooted at `u` with the subtree rooted `v`"""
+        if u.parent == None:  # u is root
+            self.root = v
+        elif u == u.parent.left:
+            u.parent.left = v
+        else:
+            u.parent.right = v
+        if v is not None:
+            v.parent = u.parent
 
     def inorder(self, node):
         if node != None:  # recursive
@@ -70,27 +114,6 @@ class BST:
         while node.right is not None:
             node = node.right
         return node
-
-    def successor(self, node):
-        """
-        Cases:
-        1. Node has a right subtree - successor is minimum element in right subtree
-        2. Node does not have a right subtree:
-           i. Node is the left child of its parent - then successor = parent
-           ii. Node is the right subchild of its parent - keep climbing up parent till a node becomes the left child of
-              a parent. Then that parent is successor
-           (i) and (ii) are implemented using similar logic. Keep parenting till it becomes a left child
-        """
-        if node.right is not None:
-            return self.minimum(node.right)
-        y = node.parent
-        while y is not None and y.right == node:
-            node = y
-            y = y.parent
-        return y
-
-    def predecessor(self, node):
-        pass
 
 
 numbers = [12, 5, 2, 9, 18, 19, 15, 17]
