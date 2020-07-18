@@ -26,6 +26,19 @@ class BST:
         else:
             y.right = node
 
+    def insert_recurive(self, node, parent, new_node):
+        "Recurive version of insert()"
+        if node is None:
+            new_node.parent = parent
+            return new_node
+
+        if new_node.key < node.key:
+            node.left = self.insert_recurive(node.left, node, new_node)
+        else:
+            node.right = self.insert_recurive(node.right, node, new_node)
+
+        return node
+
     def delete(self, node_z):
         """
         Cases:
@@ -116,9 +129,11 @@ class BST:
         return node
 
 
-numbers = [12, 5, 2, 9, 18, 19, 15, 17]
-bst = BST()
+# fmt: off
+numbers = [50, 35, 70, 43, 45, 44, 49, 38, 32, 34, 15, 25, 10, 20, 18, 65, 90, 80, 85, 95] 
+# fmt: on
+sample_bst = BST()
 for i in numbers:
-    bst.insert(Node(i))
+    sample_bst.insert(Node(i))
 
-bst.insert(Node(13))  # test
+# max height is 6
