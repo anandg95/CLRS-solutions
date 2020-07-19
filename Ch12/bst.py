@@ -4,6 +4,9 @@ class Node:
         self.left = left
         self.right = right
 
+    def __repr__(self):
+        return f"Node : {self.key}"
+
 
 class BST:
     def __init__(self, root=None):
@@ -135,5 +138,3 @@ numbers = [50, 35, 70, 43, 45, 44, 49, 38, 32, 34, 15, 25, 10, 20, 18, 65, 90, 8
 sample_bst = BST()
 for i in numbers:
     sample_bst.insert(Node(i))
-
-# max height is 6
